@@ -10,8 +10,8 @@ SUCCESS='\033[38;2;207;225;185m'
 NC='\033[0m'  # No Color
 
 # Define variables
-PYTHON_PATH="/usr/bin/python3"
-VENV_PATH="venv"
+PYTHON_PATH="/usr/bin/python3.10"
+VENV_PATH="./venv"
 
 
 # FUNCTIONS
@@ -40,7 +40,7 @@ deactivate_venv() {
 # Function to create and activate the virtual environment, and install requirements
 activate_venv() {
     echo "${INFO}[INFO] Creating virtual env ${VENV_PATH}...${NC}"
-    python3 -m venv "$VENV_PATH" > /dev/null 2>&1
+    python3 -m virtualenv "$VENV_PATH" > /dev/null 2>&1
     source "$VENV_PATH/bin/activate"
 
     echo "${INFO}[INFO] Installing requirements...${NC}"

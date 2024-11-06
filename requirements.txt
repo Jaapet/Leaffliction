@@ -1,0 +1,5 @@
+pillow==11.0.0
+plantcv==4.5.1
+rembg==2.0.59
+rembg==2.0.59
+numpy==1.26.4

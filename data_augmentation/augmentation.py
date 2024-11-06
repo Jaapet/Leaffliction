@@ -1,11 +1,13 @@
 import sys
 import os
+
+sys.path.append(os.path.abspath("../utils"))
 from image_utils import *
 
 
 def save_image(img, filename, suffix):
-	os.makedirs("augmented_images", exist_ok=True)
-	filename = os.path.join('augmented_images', f"{filename}_{suffix}.JPG")
+	os.makedirs("../augmented_images", exist_ok=True)
+	filename = os.path.join('../augmented_images', f"{filename}_{suffix}.JPG")
 	img.save(filename, "JPEG")
 
 
