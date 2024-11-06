@@ -7,6 +7,8 @@ sys.path.append(os.path.abspath("../utils"))
 from file_utils import *
 
 RESULSTS_PATH = "Results"
+CURRENT_WORKING_DIRECTORY = os.path.abspath(os.getcwd())
+RESULTS_DIRECTORY = f"{CURRENT_WORKING_DIRECTORY}/Results"
 PIE_CHART_FILENAME = "pie_chart.png"
 BAR_CHART_FILENAME = "bar_chart.png"
 
@@ -39,7 +41,7 @@ def plot(directory, content):
                 startangle=140, colors=colors)
         plt.title(f'{directory} class distribution', fontsize=16)
         plt.axis('equal')
-        plt.savefig(RESULSTS_PATH)
+        plt.savefig(os.path.join(RESULTS_DIRECTORY, PIE_CHART_FILENAME))
         plt.close()
         print(f"Distribution.py: Pie chart saved at "
               f"{RESULSTS_PATH}/{PIE_CHART_FILENAME}")
@@ -62,7 +64,7 @@ def plot(directory, content):
         plt.title(f'{directory} class distribution', fontsize=16)
         plt.xticks(rotation=45, fontsize=12)
         plt.tight_layout()
-        plt.savefig(RESULSTS_PATH)
+        plt.savefig(os.path.join(RESULTS_DIRECTORY, BAR_CHART_FILENAME))
         plt.close()
         print(f"Distribution.py: Bar chart saved at "
               f"{RESULSTS_PATH}/{BAR_CHART_FILENAME}")
@@ -71,7 +73,7 @@ def plot(directory, content):
     values = [len(files) for files in content.values()]
     colors = plt.cm.Paired(range(len(labels)))
 
-    os.makedirs(RESULSTS_PATH, exist_ok=True)
+    os.makedirs(RESULTS_DIRECTORY, exist_ok=True)
     plot_pie(directory, labels, values)
     plot_bar(directory, labels, values)
 
