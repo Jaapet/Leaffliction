@@ -15,12 +15,15 @@ def save_image(img, filename, suffix):
 	cv2.imwrite(os.path.join("../transformed_images", filename), img)
 
 
-def	gen_transformed_images(img: Image, filename: str):
-	save_image(gaussian_blur(img), filename, "gauss_blur")
-	save_image(mask(img), filename, "mask")
-	# save_image(roi_objects(img), filename, "shear")
-	# save_image(analyze_ojects(img), filename, "crop")
-	# save_image(pseudolandmarks(img), filename, "blur")
+def	gen_transformed_images(img, filename: str):
+	gaussian = gaussian_blur(img)
+	masked = mask(img, gaussian)
+	roi = roi_objects(img, masked)
+	save_image(gaussian, filename, "gauss_blur")
+	save_image(masked, filename, "mask")
+	save_image(roi, filename, "roi")
+	# save_image(analyze_ojects(img), filename, "analyze")
+	# save_image(pseudolandmarks(img), filename, "plm")
 
 
 def main():
