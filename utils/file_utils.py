@@ -1,6 +1,7 @@
 import os
 
-def check_files(directory):
+
+def check_directory(directory):
     """
     Check if the directory exists, is readable, and has files.
 
@@ -18,7 +19,24 @@ def check_files(directory):
         raise Exception(f"Directory is not readable: {directory}")
     if not os.listdir(directory):
         raise Exception(f"Directory is empty: {directory}")
-    
+
+
+def check_file(file_path):
+    """
+    Check if the file exists and is readable.
+
+    Parameters:
+        file_path (str): The file to check.
+    Returns: None
+    Raises:
+        Exception: If the file does not exist.
+        Exception: If the file is not readable.
+    """
+    if not os.path.exists(file_path):
+        raise Exception(f"File does not exist: {file_path}")
+    if not os.access(file_path, os.R_OK):
+        raise Exception(f"File is not readable: {file_path}")
+
 
 def fetch_files(directory):
     """

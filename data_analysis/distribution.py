@@ -1,10 +1,11 @@
-import argparse
 import os
 import sys
+import argparse
 import matplotlib.pyplot as plt
 
-sys.path.append(os.path.abspath("../utils"))
-from file_utils import *
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import utils as utils
+
 
 RESULSTS_PATH = "Results"
 CURRENT_WORKING_DIRECTORY = os.path.abspath(os.getcwd())
@@ -88,9 +89,9 @@ def main(directory):
     Returns: None
     Raises: None
     """
-    check_files(directory)
-    files = fetch_files(directory)
-    grouped_files = group_files(directory, files)
+    utils.check_directory(directory)
+    files = utils.fetch_files(directory)
+    grouped_files = utils.group_files(directory, files)
     plot(directory.split('/')[-1], grouped_files)
 
 
