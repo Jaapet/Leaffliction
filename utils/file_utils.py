@@ -60,13 +60,15 @@ def fetch_files(directory):
     return files
 
 
-def group_files(directory, files):
+def group_files(directory, files, absolute=False):
     """
     Group files by their last-level subfolder.
 
     Parameters:
         directory (str): The directory name.
         files (list): A list of all image files in the directory.
+        absolute (bool): If True, the list of files will be
+            returned as absolute paths.
     Returns:
         content (dict): A dictionary with the last-level
             subfolder as keys and the number of files as values.
@@ -81,5 +83,8 @@ def group_files(directory, files):
             last_subfolder = parts[-2]
             if last_subfolder not in content:
                 content[last_subfolder] = []
-            content[last_subfolder].append(parts[-1])
+            if absolute:
+                content[last_subfolder].append(file_path)
+            else:
+                content[last_subfolder].append(parts[-1])
     return content

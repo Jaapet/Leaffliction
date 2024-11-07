@@ -31,4 +31,4 @@ if __name__ == "__main__":
         main(args.images_directory)
 
     except Exception as e:
-        print(f"Distribution.py: error: {e}")
+        print(f"predict.py: error: {e}")
