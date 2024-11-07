@@ -1,2 +1,6 @@
 venv/
 images/
+data_analysis/Results/
+augmented_images/
+transformed_images/
+images_analysis/

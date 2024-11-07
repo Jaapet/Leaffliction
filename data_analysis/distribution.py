@@ -7,9 +7,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import utils as utils
 
 
-RESULSTS_PATH = "Results"
+RESULSTS_PATH = "images_analysis"
 CURRENT_WORKING_DIRECTORY = os.path.abspath(os.getcwd())
-RESULTS_DIRECTORY = f"{CURRENT_WORKING_DIRECTORY}/Results"
+RESULTS_DIRECTORY = f"{CURRENT_WORKING_DIRECTORY}/../{RESULSTS_PATH}"
 PIE_CHART_FILENAME = "pie_chart.png"
 BAR_CHART_FILENAME = "bar_chart.png"
 

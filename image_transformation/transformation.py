@@ -3,9 +3,8 @@ import os
 
 import cv2
 
-sys.path.append(os.path.abspath("../utils"))
-from pcv_utils import load_pcv, gaussian_blur, mask, \
-    roi_objects, analyze_objects, pseudolandmarks
+sys.path.append(os.path.abspath(".."))
+import utils as utils
 
 
 def save_image(img, filename, suffix):
@@ -16,11 +15,11 @@ def save_image(img, filename, suffix):
 
 
 def gen_transformed_images(img, filename: str):
-    gaussian = gaussian_blur(img)
-    masked = mask(img, gaussian)
-    roi, roi_mask = roi_objects(img, masked)
-    analyzed = analyze_objects(img, roi_mask)
-    plm = pseudolandmarks(img, roi_mask)
+    gaussian = utils.gaussian_blur(img)
+    masked = utils.mask(img, gaussian)
+    roi, roi_mask = utils.roi_objects(img, masked)
+    analyzed = utils.analyze_objects(img, roi_mask)
+    plm = utils.pseudolandmarks(img, roi_mask)
     save_image(gaussian, filename, "gauss_blur")
     save_image(masked, filename, "mask")
     save_image(roi, filename, "roi")
@@ -34,7 +33,7 @@ def main():
             raise AssertionError("number of args must be 1")
 
         path = sys.argv[1]
-        img = load_pcv(path)
+        img = utils.load_pcv(path)
         gen_transformed_images(img, os.path.basename(path))
 
     except Exception as e:

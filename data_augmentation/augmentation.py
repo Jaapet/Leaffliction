@@ -1,9 +1,8 @@
 import sys
 import os
 
-sys.path.append(os.path.abspath("../utils"))
-from image_utils import load_image, flip_image, rotate_image, \
-    shear_image, crop_image, blur_image, contrast_image
+sys.path.append(os.path.abspath(".."))
+import utils as utils
 
 
 def save_image(img, filename, suffix):
@@ -13,12 +12,12 @@ def save_image(img, filename, suffix):
 
 
 def gen_augmented_images(img, filename: str):
-    save_image(flip_image(img), filename, "flip")
-    save_image(rotate_image(img), filename, "rotate")
-    save_image(shear_image(img), filename, "shear")
-    save_image(crop_image(img), filename, "crop")
-    save_image(blur_image(img), filename, "blur")
-    save_image(contrast_image(img), filename, "contrast")
+    save_image(utils.flip_image(img), filename, "flip")
+    save_image(utils.rotate_image(img), filename, "rotate")
+    save_image(utils.shear_image(img), filename, "shear")
+    save_image(utils.crop_image(img), filename, "crop")
+    save_image(utils.blur_image(img), filename, "blur")
+    save_image(utils.contrast_image(img), filename, "contrast")
 
 
 def main():
@@ -27,7 +26,7 @@ def main():
             raise AssertionError("number of args must be 1")
 
         path = sys.argv[1]
-        img = load_image(path)
+        img = utils.load_image(path)
         gen_augmented_images(img, os.path.basename(path))
 
     except Exception as e:
