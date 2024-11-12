@@ -62,9 +62,47 @@ def upsample_dataset(images):
                 break
 
 
-def balance_dataset(directory):
+def balance_dataset(directory, max_retries=2):
     utils.check_directory(directory)
-    images = utils.fetch_files(directory)
-    grouped_images = utils.group_files(directory, images, True)
-    upsample_dataset(grouped_images)
-    print(f"train.py: Balancing dataset done. Save at {DATASET_PATH}")
+
+    if os.path.exists(DATASET_PATH):
+        attempts = 0
+        while attempts < max_retries:
+            try:
+                user_input = input(f"train.py: The dataset path "
+                                   f"'{DATASET_PATH}' already exists.\n"
+                                   "train.py: Do you want to "
+                                   "rebalance the dataset? (yes/no): "
+                                   ).strip().lower()
+
+                if user_input in {"yes", "y"}:
+                    break
+                elif user_input in {"no", "n"}:
+                    print("train.py: Rebalancing canceled.")
+                    return
+                else:
+                    raise ValueError("Invalid input. Please enter "
+                                     "'yes' or 'no'.")
+
+            except ValueError as ve:
+                print(f"Error: {ve}")
+                attempts += 1
+
+            except (KeyboardInterrupt, EOFError):
+                print("\ntrain.py: Operation interrupted by user. "
+                      "Rebalacing canceled.")
+                return
+
+        if attempts >= max_retries:
+            print("train.py: Too many invalid attempts. "
+                  "Rebalancing canceled.")
+            return
+    try:
+        images = utils.fetch_files(directory)
+        grouped_images = utils.group_files(directory, images, True)
+        upsample_dataset(grouped_images)
+        print(f"train.py: Balancing dataset done. Saved at {DATASET_PATH}")
+
+    except Exception as e:
+        print(f"train.py: An error occurred while balancing the dataset: "
+              f"{str(e)}")
