@@ -1,5 +1,4 @@
 import os
-import shutil
 import utils as utils
 
 DATASET_PATH = "./../images_dataset"
@@ -12,12 +11,12 @@ def save_dataset_image(group, img, filename, suffix, max):
         os.makedirs(sub_dataset_path, exist_ok=True)
     entries = os.listdir(sub_dataset_path)
     if len(entries) >= max:
-        print(f"\rtrain.py: Augmentations done for {group}\033[K")
+        print(f"\rtrain.py: Augmentations done for '{group}'\033[K")
         return False
     new_filename = f"{filename}_{suffix}.JPG"
     filename = os.path.join(sub_dataset_path, new_filename)
     img.save(filename, "JPEG")
-    print(f"\rtrain.py: Augmentating image {new_filename} "
+    print(f"\rtrain.py: Augmentating image '{new_filename}' "
           "saved to {DATASET_PATH}\033[K", end="")
     return True
 
@@ -51,10 +50,6 @@ def transform_dataset_image(group, path, max):
 
 
 def upsample_dataset(images):
-
-    if os.path.exists(DATASET_PATH):
-        shutil.rmtree(DATASET_PATH)
-        print("train.py: Deleting previous dataset")
     max_images = max(len(value) for value in images.values())
     for group, images in images.items():
         for image in images:
@@ -67,4 +62,4 @@ def balance_dataset(directory):
     images = utils.fetch_files(directory)
     grouped_images = utils.group_files(directory, images, True)
     upsample_dataset(grouped_images)
-    print(f"train.py: Balancing dataset done. Save at {DATASET_PATH}")
+    print("train.py: Balancing dataset done.")
