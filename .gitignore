@@ -5,3 +5,4 @@ augmented_images/
 transformed_images/
 images_analysis/
 images_dataset/
+data_classification/trained_model.keras
