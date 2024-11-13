@@ -5,5 +5,5 @@ plantcv==4.5.1
 rembg==2.0.59
 rembg==2.0.59
 numpy==1.26.4
-tensorflow==2.18.0
-pytest
+tensorflow-cpu==2.18.0
+a==1.0
