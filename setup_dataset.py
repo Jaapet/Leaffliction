@@ -1,19 +1,24 @@
 import os
-import sys
 import shutil
-import argparse
-
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import utils as utils
 
 
 def promt_reloading(max_retries=2):
+    """
+    Prompts the user to reload the dataset if it already exists.
+    Allows a maximum number of attempts to provide a valid response.
+
+    Parameters:
+    - max_retries (int): Maximum number of attempts for user input.
+
+    Returns:
+    - bool: True if the user confirms reloading, False otherwise.
+    """
     attempts = 0
     while attempts < max_retries:
-        user_input = input(f"setup_dataset.py: The dataset path 'images' "
-                           "already exists.\n"
-                           "setup_dataset.py: Do you want to reload the dataset? "
+        user_input = input("setup_dataset.py: The dataset path 'images' " +
+                           "already exists.\n" +
+                           "setup_dataset.py: " +
+                           "Do you want to reload the dataset? " +
                            "(yes/no): ").strip().lower()
         if user_input in {"yes", "y"}:
             return True
@@ -28,6 +33,17 @@ def promt_reloading(max_retries=2):
 
 
 def setup_dataset():
+    """
+    Sets up the dataset directory structure by organizing image files based on
+    category names. If a previous dataset exists,
+    it offers the option to reload it.
+
+    The function organizes images by moving subdirectories with names starting
+    with 'Apple' and 'Grape' into respective 'apples' and 'grapes' directories.
+
+    Raises:
+    - Exception: If an error occurs during the directory or file operations.
+    """
     if not os.path.exists('leaves/images'):
         print("setup_dataset.py: 'leaves/images' doesn't exists")
         return
@@ -53,13 +69,17 @@ def setup_dataset():
         shutil.rmtree('leaves')
 
         print("setup_dataset.py: Setup dataset completed. " +
-              f"Data saved at 'images'")
+              "Data saved at 'images'")
 
     except Exception as e:
-        print(f"setup_dataset.py: Error occurred while setup the dataset: {str(e)}")
+        print("setup_dataset.py:" +
+              f"Error occurred while setup the dataset: {str(e)}")
 
 
 def main():
+    """
+    Entry point of the script that initializes the dataset setup.
+    """
     setup_dataset()
 
 

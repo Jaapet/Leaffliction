@@ -4,11 +4,30 @@ import rembg
 
 
 def load_pcv(path: str):
+    """
+    Loads an image using OpenCV.
+
+    Parameters:
+    - path (str): Path to the image file.
+
+    Returns:
+    - numpy.ndarray: The loaded image as a NumPy array.
+    """
     img = cv2.imread(path)
     return img
 
 
 def gaussian_blur(img):
+    """
+    Applies Gaussian blur to an image after removing its
+    background and applying a binary threshold.
+
+    Parameters:
+    - img (numpy.ndarray): The input image to blur.
+
+    Returns:
+    - numpy.ndarray: The thresholded and blurred image.
+    """
     img = rembg.remove(img)
     gray = pcv.rgb2gray_lab(rgb_img=img,
                             channel='l')
@@ -22,12 +41,35 @@ def gaussian_blur(img):
 
 
 def mask(img, mask):
+    """
+    Applies a mask to an image, setting masked regions to white.
+
+    Parameters:
+    - img (numpy.ndarray): The input image to mask.
+    - mask (numpy.ndarray): The binary mask to apply.
+
+    Returns:
+    - numpy.ndarray: The masked image.
+    """
     return pcv.apply_mask(img=img,
                           mask=mask,
                           mask_color='white')
 
 
 def roi_objects(img, mask):
+    """
+    Creates a region of interest (ROI) mask on the input
+    image and highlights the ROI on the original image.
+
+    Parameters:
+    - img (numpy.ndarray): The original image.
+    - mask (numpy.ndarray): The binary mask defining the object regions.
+
+    Returns:
+    - tuple: A tuple with:
+        - (numpy.ndarray): The image with ROI highlighted.
+        - (numpy.ndarray): The ROI mask.
+    """
     roi = pcv.roi.rectangle(img=mask,
                             x=0,
                             y=0,
@@ -49,11 +91,31 @@ def roi_objects(img, mask):
 
 
 def analyze_objects(img, mask):
+    """
+    Analyzes the size and shape of objects within a masked region.
+
+    Parameters:
+    - img (numpy.ndarray): The original image.
+    - mask (numpy.ndarray): The labeled mask of object regions.
+
+    Returns:
+    - dict: A dictionary containing size analysis results.
+    """
     return pcv.analyze.size(img=img,
                             labeled_mask=mask)
 
 
 def pseudolandmarks(img, mask):
+    """
+    Adds pseudolandmark points to the input image, marking key areas.
+
+    Parameters:
+    - img (numpy.ndarray): The original image.
+    - mask (numpy.ndarray): The mask to define landmark locations.
+
+    Returns:
+    - numpy.ndarray: The image with pseudolandmarks added.
+    """
     top, bot, center_v = pcv.homology.x_axis_pseudolandmarks(img=img,
                                                              mask=mask,
                                                              label='default')
@@ -64,6 +126,19 @@ def pseudolandmarks(img, mask):
 
 
 def draw_pseudolandmarks(img, plms, color, radius):
+    """
+    Draws pseudolandmarks as colored circles on the image
+    at specified points.
+
+    Parameters:
+    - img (numpy.ndarray): The image on which to draw.
+    - plms (list): List of pseudolandmark coordinates.
+    - color (tuple): Color of the circles as an (R, G, B) tuple.
+    - radius (int): Radius of the landmark circles.
+
+    Returns:
+    - numpy.ndarray: The image with pseudolandmarks drawn.
+    """
     for i in range(len(plms)):
         if len(plms[i]) >= 1 and len(plms[i][0]) >= 2:
             center_x = plms[i][0][1]

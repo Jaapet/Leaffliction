@@ -6,12 +6,38 @@ import utils as utils
 
 
 def save_image(img, filename, suffix):
+    """
+    Saves an augmented image with a specific suffix
+    in the '../augmented_images' directory.
+
+    Parameters:
+    img (PIL.Image): The augmented image to be saved.
+    filename (str): The base name of the file without any suffix.
+    suffix (str): The suffix describing the augmentation type.
+
+    Returns:
+    None
+    """
     os.makedirs("../augmented_images", exist_ok=True)
     filename = os.path.join('../augmented_images', f"{filename}_{suffix}.JPG")
     img.save(filename, "JPEG")
 
 
 def gen_augmented_images(img, filename: str):
+    """
+    Generates multiple augmented images
+    (flipped, rotated, sheared, cropped, blurred, contrast-adjusted)
+    and saves each one with a specific suffix
+    to distinguish the augmentation type.
+
+    Parameters:
+    img (PIL.Image): The original image to be augmented.
+    filename (str): The base name of the image file,
+    used as a prefix for the saved augmented images.
+
+    Returns:
+    None
+    """
     save_image(utils.flip_image(img), filename, "flip")
     save_image(utils.rotate_image(img), filename, "rotate")
     save_image(utils.shear_image(img), filename, "shear")
@@ -21,6 +47,22 @@ def gen_augmented_images(img, filename: str):
 
 
 def main():
+    """
+    Main function to load an image from the provided path
+    and generate multiple augmented versions of it.
+
+    This function:
+    - Checks that the correct number of arguments is passed (expects 1).
+    - Loads the specified image using utils.load_image().
+    - Calls gen_augmented_images() to create and save the augmented images.
+
+    Raises:
+    AssertionError: If the incorrect number of arguments is provided.
+    Exception: For general errors during image loading or augmentation.
+
+    Returns:
+    None
+    """
     try:
         if len(sys.argv) != 2:
             raise AssertionError("number of args must be 1")

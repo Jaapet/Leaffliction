@@ -11,6 +11,22 @@ TEST_DATASET_PATH = '../images_dataset/test'
 
 
 def evaluate():
+    """
+    Loads a trained model and evaluates
+    its performance on a test dataset.
+
+    This function:
+    - Loads the pre-trained model from MODEL_PATH.
+    - Prepares the test dataset using ImageDataGenerator with rescaling.
+    - Uses the model to evaluate the test data,
+      printing the accuracy and loss.
+
+    Parameters:
+    None
+
+    Returns:
+    None
+    """
     model = load_model(MODEL_PATH)
 
     test_datagen = ImageDataGenerator(rescale=1./255)
@@ -27,6 +43,18 @@ def evaluate():
 
 
 def main():
+    """
+    Main function to run the evaluation of the trained model.
+
+    This function calls evaluate()
+    to load the model and perform evaluation.
+
+    Parameters:
+    None
+
+    Returns:
+    None
+    """
     evaluate()
 
 
