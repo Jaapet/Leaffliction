@@ -8,7 +8,7 @@ import utils as utils
 def save_image(img, filename, suffix):
     """
     Saves an augmented image with a specific suffix
-    in the '../augmented_images' directory.
+    in the '../augmented_directory' directory.
 
     Parameters:
     img (PIL.Image): The augmented image to be saved.
@@ -18,8 +18,8 @@ def save_image(img, filename, suffix):
     Returns:
     None
     """
-    os.makedirs("../augmented_images", exist_ok=True)
-    filename = os.path.join('../augmented_images', f"{filename}_{suffix}.JPG")
+    os.makedirs("../augmented_directory", exist_ok=True)
+    filename = os.path.join('../augmented_directory', f"{filename}_{suffix}.JPG")
     img.save(filename, "JPEG")
 
 
