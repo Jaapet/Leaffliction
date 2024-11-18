@@ -2,6 +2,8 @@ import argparse
 import os
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
+import cv2
 
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -61,6 +63,46 @@ def load_and_predict(img_path):
 
     predicted_class_name = class_indices[predicted_class[0]]
     print(f"Image class: {predicted_class_name}")
+    display_image(img_path, predicted_class_name)
+
+
+def save_mask(img_path):
+    img = utils.load_pcv(img_path)
+    masked = utils.mask(img, utils.gaussian_blur(img))
+    cv2.imwrite('mask.jpg', masked)
+
+
+def display_image(original_path, predicted_class_name):
+    """
+    Displays two images side by side with the predicted class name as the title.
+
+    Args:
+        original_path (str): The file path to the original image.
+        processed_img (PIL.Image.Image): The processed image.
+        predicted_class_name (str): The name of the predicted class.
+
+    Returns:
+        None
+    """
+    save_mask(original_path)
+    original_img = image.load_img(original_path)
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+
+    axes[0].imshow(original_img)
+    axes[0].axis('off')  # Hide axes
+    axes[0].set_title("Original Image", fontsize=14)
+
+    axes[1].imshow(image.load_img('mask.jpg'))
+    axes[1].axis('off')  # Hide axes
+    axes[1].set_title("Mask Image", fontsize=14)
+
+    plt.figtext(0.5, 0.01, f"Predicted Class: {predicted_class_name}", 
+                ha="center", fontsize=12, wrap=True)
+
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    plt.show()
+    os.remove('mask.jpg')
 
 
 def main(image):
