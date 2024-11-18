@@ -1,86 +1,77 @@
 import sys
 import os
-
+import argparse
 import cv2
 
 sys.path.append(os.path.abspath(".."))
 import utils as utils
 
-
-def save_image(img, filename, suffix):
-    """
-    Saves a transformed image with a specified suffix
-    in the '../transformed_images' directory.
-
-    Parameters:
-    img (numpy.ndarray): The transformed image to save.
-    filename (str): The base name of the file without any suffix.
-    suffix (str): The suffix describing the transformation type.
-
-    Returns:
-    None
-    """
-    os.makedirs("../transformed_images", exist_ok=True)
-    filename = os.path.join('../transformed_images',
-                            f"{filename}_{suffix}.JPG")
-    cv2.imwrite(os.path.join("../transformed_images", filename), img)
+RESULTS_DIRECTORY="../transformed_images"
 
 
-def gen_transformed_images(img, filename: str):
-    """
-    Generates multiple transformed versions of
-    an input image (Gaussian blurred, masked, ROI,
-    analyzed, and pseudolandmarked) and saves
-    each one with a specific suffix to indicate
-    the transformation type.
+def save_image(img, filename, suffix, destination):
+    os.makedirs(destination, exist_ok=True)
+    filename_no_ext, _ = os.path.splitext(filename)
+    new_filename = f"{filename_no_ext}_{suffix}.JPG"
+    cv2.imwrite(os.path.join(destination, new_filename), img)
 
-    Parameters:
-    img (numpy.ndarray): The original image to be transformed.
-    filename (str): The base name of the image file,
-    used as a prefix for the saved transformed images.
 
-    Returns:
-    None
-    """
+def gen_transformed_images(img, filename: str, destination: str):
     gaussian = utils.gaussian_blur(img)
     masked = utils.mask(img, gaussian)
     roi, roi_mask = utils.roi_objects(img, masked)
     analyzed = utils.analyze_objects(img, roi_mask)
     plm = utils.pseudolandmarks(img, roi_mask)
-    save_image(gaussian, filename, "gauss_blur")
-    save_image(masked, filename, "mask")
-    save_image(roi, filename, "roi")
-    save_image(analyzed, filename, "analyze")
-    save_image(plm, filename, "plm")
+    save_image(gaussian, filename, "gauss_blur", destination)
+    save_image(masked, filename, "mask", destination)
+    save_image(roi, filename, "roi", destination)
+    save_image(analyzed, filename, "analyze", destination)
+    save_image(plm, filename, "plm", destination)
 
+
+def transformation(args):
+    source_path = args.source_explicit or args.source
+    if not source_path:
+        print("Error: You must provide a source path either as a positional argument or using -src.")
+        sys.exit(1)
+
+    destination_path = args.destination
+    path_type = utils.path_type(source_path)
+
+    if path_type:
+        utils.check_directory(source_path)
+        if utils.check_single_directory(source_path) == False:
+            raise Exception("Given directory should not contain sub-directories.")
+        files = utils.fetch_files(source_path)
+        for file in files:
+            img = utils.load_pcv(file)
+            gen_transformed_images(img, os.path.basename(file), destination_path)
+            print(f"\rtransformation.py: Augmentations for '{file}' done.\033[K", end="")
+    else:
+        utils.check_file(source_path)
+        img = utils.load_pcv(source_path)
+        gen_transformed_images(img, os.path.basename(source_path), destination_path)
+        print(f"transformation.py: Augmentations for '{source_path}' done.")
+    print(f"Transformations saved at '{destination_path}'.")
 
 def main():
-    """
-    Main function to load an image from the specified path
-    and generate multiple transformed versions.
-
-    This function:
-    - Verifies the correct number of arguments is passed (expects 1 argument).
-    - Loads the specified image using utils.load_pcv().
-    - Calls gen_transformed_images() to create and save the transformed images.
-
-    Raises:
-    AssertionError: If the incorrect number of arguments is provided.
-    Exception: For general errors during image loading or transformation.
-
-    Returns:
-    None
-    """
     try:
-        if len(sys.argv) != 2:
-            raise AssertionError("number of args must be 1")
-
-        path = sys.argv[1]
-        img = utils.load_pcv(path)
-        gen_transformed_images(img, os.path.basename(path))
-
+        parser = argparse.ArgumentParser(
+            prog="Transformation",
+            description="Creates multiple transformations of a given image or set of images."
+        )
+        parser.add_argument("source", nargs="?", default=None,
+            help="Path to a single image or a directory of images."
+        )
+        parser.add_argument("-src", "--source_explicit", type=str,
+            help="Explicit source path to an image or directory."
+        )
+        parser.add_argument("-dst", "--destination", type=str, default=RESULTS_DIRECTORY,
+            help="Directory where transformed images will be saved (default: ../transformed_images)."
+        )
+        transformation(parser.parse_args())
     except Exception as e:
-        print(f"{Exception.__name__}: {e}")
+        print(f"transformation.py: {e}")
 
 
 if __name__ == "__main__":
