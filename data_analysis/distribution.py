@@ -44,7 +44,7 @@ def plot(directory, content):
         plt.axis('equal')
         plt.savefig(os.path.join(RESULTS_DIRECTORY, PIE_CHART_FILENAME))
         plt.close()
-        print(f"Distribution.py: Pie chart saved at "
+        print(f"distribution.py: Pie chart done. Saved at "
               f"{RESULSTS_PATH}/{PIE_CHART_FILENAME}")
 
     def plot_bar(directory, labels, values):
@@ -67,7 +67,7 @@ def plot(directory, content):
         plt.tight_layout()
         plt.savefig(os.path.join(RESULTS_DIRECTORY, BAR_CHART_FILENAME))
         plt.close()
-        print(f"Distribution.py: Bar chart saved at "
+        print(f"distribution.py: Bar chart done. Saved at "
               f"{RESULSTS_PATH}/{BAR_CHART_FILENAME}")
 
     labels = list(content.keys())
@@ -108,4 +108,4 @@ if __name__ == "__main__":
         main(args.images_directory)
 
     except Exception as e:
-        print(f"Distribution.py: error: {e}")
+        print(f"distribution.py: error: {e}")

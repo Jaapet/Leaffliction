@@ -1,9 +1,11 @@
 import sys
 import os
+import argparse
 
 sys.path.append(os.path.abspath(".."))
 import utils as utils
 
+RESULTS_DIRECTORY="../augmented_directory"
 
 def save_image(img, filename, suffix):
     """
@@ -18,8 +20,8 @@ def save_image(img, filename, suffix):
     Returns:
     None
     """
-    os.makedirs("../augmented_directory", exist_ok=True)
-    filename = os.path.join('../augmented_directory', f"{filename}_{suffix}.JPG")
+    os.makedirs(RESULTS_DIRECTORY, exist_ok=True)
+    filename = os.path.join(RESULTS_DIRECTORY, f"{filename}_{suffix}.JPG")
     img.save(filename, "JPEG")
 
 
@@ -38,12 +40,14 @@ def gen_augmented_images(img, filename: str):
     Returns:
     None
     """
+    save_image(img, filename, "original")
     save_image(utils.flip_image(img), filename, "flip")
     save_image(utils.rotate_image(img), filename, "rotate")
     save_image(utils.shear_image(img), filename, "shear")
     save_image(utils.crop_image(img), filename, "crop")
     save_image(utils.blur_image(img), filename, "blur")
     save_image(utils.contrast_image(img), filename, "contrast")
+    print(f"augmentation.py: Augmentations done. Save at '{RESULTS_DIRECTORY}'.")
 
 
 def main():
@@ -64,15 +68,21 @@ def main():
     None
     """
     try:
-        if len(sys.argv) != 2:
-            raise AssertionError("number of args must be 1")
-
-        path = sys.argv[1]
+        parser = argparse.ArgumentParser(
+            prog="Augmentation",
+            description="Creates 6 different augmentations of a \
+                given image"
+        )
+        parser.add_argument("image_path", type=str,
+                            help="Path to the an image")
+        args = parser.parse_args()
+        path = args.image_path
+        utils.check_file(path)
         img = utils.load_image(path)
         gen_augmented_images(img, os.path.basename(path))
 
     except Exception as e:
-        print(f"{Exception.__name__}: {e}")
+        print(f"augmentation.py: {Exception.__name__}: {e}")
 
 
 if __name__ == "__main__":

@@ -15,10 +15,13 @@ def check_directory(directory):
     """
     if not os.path.exists(directory):
         raise Exception(f"Directory does not exist: {directory}")
+    if not os.path.isdir(directory):
+        raise Exception(f"Path is not a directory: {directory}")
     if not os.access(directory, os.R_OK):
         raise Exception(f"Directory is not readable: {directory}")
-    if not os.listdir(directory):
+    if not os.listdir(directory):  # Check if the directory is empty
         raise Exception(f"Directory is empty: {directory}")
+    
 
 
 def check_file(file_path):
@@ -36,7 +39,8 @@ def check_file(file_path):
         raise Exception(f"File does not exist: {file_path}")
     if not os.access(file_path, os.R_OK):
         raise Exception(f"File is not readable: {file_path}")
-
+    if os.path.isdir(file_path):
+        raise Exception(f"Path is a directory, not a file: {file_path}")
 
 def fetch_files(directory):
     """
