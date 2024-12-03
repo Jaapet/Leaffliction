@@ -40,7 +40,7 @@ deactivate_venv() {
 # Function to create and activate the virtual environment, and install requirements
 activate_venv() {
     echo "${INFO}[INFO] Creating virtual env ${VENV_PATH}...${NC}"
-    python3 -m virtualenv "$VENV_PATH" > /dev/null 2>&1
+    python3 -m venv "$VENV_PATH" > /dev/null 2>&1
     source "$VENV_PATH/bin/activate"
 
     echo "${INFO}[INFO] Installing requirements...${NC}"
@@ -49,13 +49,14 @@ activate_venv() {
     if [ $? -eq 0 ]; then
         echo "${SUCCESS}[SUCCESS] Requirements installed successfully!${NC}"
     else
-        echo "${ERROR}[ERROR] Failed to install requirements. Check the logs above.${NC}"
+        echo "${ERROR}[ERROR] Failed to install requirements.${NC}"
         deactivate_venv true
         return 1
     fi
-    
+
     echo "${SUCCESS}[SUCCESS] Virtual environment is ready!${NC}"
 }
+
 
 # SCRIPT
 # ------
