@@ -45,11 +45,17 @@ activate_venv() {
 
     echo "${INFO}[INFO] Installing requirements...${NC}"
     python3 -m pip install --upgrade pip > /dev/null 2>&1
-    python3 -m pip install --force-reinstall -r requirements.txt
+    python3 -m pip install --force-reinstall -r requirements.txt > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo "${SUCCESS}[SUCCESS] Requirements installed successfully!${NC}"
+    else
+        echo "${ERROR}[ERROR] Failed to install requirements. Check the logs above.${NC}"
+        deactivate_venv true
+        return 1
+    fi
     
     echo "${SUCCESS}[SUCCESS] Virtual environment is ready!${NC}"
 }
-
 
 # SCRIPT
 # ------
